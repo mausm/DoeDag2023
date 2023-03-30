@@ -1,6 +1,6 @@
 import os
 import random
-os.chdir('/home/maurits/Desktop')
+os.chdir('/home/maurits/Desktop') #CHANGEME
 
 # We hebben een simpel spelletje geprogrammeerd
 # alleen het te raden nummer is nu altijd 42, wel makkelijk..maar dat moet gefixt worden want het is nu geen spel
@@ -110,9 +110,26 @@ def nummer_bepalen():
 
 
 def high_scores(HIGH_SCORES : list):
+    scores_file = "scores.text"
+
+    #check if scores file exists
+    if os.path.isfile(scores_file):
+       #read in existing scores add them
+        with open(scores_file, 'r') as file:
+            oldscores = file.readlines()
+            oldscores = [line.strip().split(":") for line in oldscores if line.strip()]
+    	
+        oldscores_as_tuples = []
+        for score in oldscores:
+            oldscores_as_tuples.append((score[0], int(score[1])))
+
+
+        HIGH_SCORES = HIGH_SCORES + oldscores_as_tuples
+            
+
     # dit sorteert de scores van hoog naar laag
     sorted_data = sorted(HIGH_SCORES, key=lambda x: x[1], reverse=True)
-
+        
     alle_scores = ""
     for score in sorted_data:
         
@@ -121,9 +138,9 @@ def high_scores(HIGH_SCORES : list):
         alle_scores += '\n ' + scorelijn
         print(scorelijn)
 
-
-    with open('scores.txt', 'w') as f:
-        f.write(alle_scores)        
+    # always store the file
+    with open(scores_file, 'w') as f:
+        f.write(alle_scores)         
 
 
 main()
